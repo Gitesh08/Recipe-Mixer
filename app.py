@@ -48,7 +48,6 @@ def match_ingredients(user_ingredients, dietary_preferences=None):
 
   # Parse the response from Gemini Pro to extract the matching recipe name and instructions (implementation depends on API response format)
     recipe = response.text
-    recipe_instructions = response.text
   # ... (code to parse response and extract recipe information)
     return recipe
     
@@ -78,7 +77,6 @@ if submit_button:
         
         # Call match_ingredients once and assign results
         recipe =  match_ingredients(user_ingredients_str, dietary_preferences=dietary_options)
-        #recipe_instructions = match_ingredients(user_ingredients, dietary_preferences=dietary_options)
 
         if recipe:
             complete_recipe = f"\n{recipe}\n"
