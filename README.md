@@ -23,41 +23,42 @@ With Recipe Mixer, you no longer have to worry about what to cook for dinner or 
 
 ### Installation:
 
-Clone the repository:
+1) Clone the repository:
 ```
 git clone https://github.com/Gitesh08/recipe-mixer.git
 ```
 
-Navigate to the project directory:
+2) Navigate to the project directory:
 ```
-cd cd recipe-mixer
+cd recipe-mixer
 ```
 
-Create a Python virtual environment:
+3) Create a Python virtual environment:
 ```
 python -m virtualenv . 
 ```
 
-Activate venv:
+4) Activate venv:
 ```
 .\scripts\activate
 ```
 
-Install the required dependencies:
+5) Install the required dependencies:
 ```
 pip install -r requirements.txt
 ```
 Ensure all dependencies are installed.
 
-Set up environment variables by creating a .env file and adding your Google API key:
+6) Set up environment variables by creating a .env file and adding your Google API key:
 ```
 GOOGLE_API_KEY=your_api_key_here
 ```
 
-Run the Streamlit application:
+7) Run the Streamlit application:
 ```
 streamlit run app.py
 ```
+
 
 ### Usage
 - Input your ingredients: Enter a list of ingredients you have on hand, separated by commas.
