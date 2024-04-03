@@ -1,4 +1,6 @@
 streamlit
 google-generativeai
 python-dotenv
-langchain.llms
+langchain
+google-cloud-aiplatform
+google-cloud-logging
