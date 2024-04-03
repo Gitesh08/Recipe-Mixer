@@ -1,8 +1,14 @@
 import streamlit as st
 import google.generativeai as genai
 from dotenv import load_dotenv
-import pandas as pd
 import os
+import vertexai
+
+
+PROJECT_ID = os.getenv("GCP_PROJECT")  # Your Google Cloud Project ID
+LOCATION = os.getenv("GCP_REGION")  # Your Google Cloud Project Region
+vertexai.init(project=PROJECT_ID, location=LOCATION)
+
 
 # Load environment variables from a .env file
 load_dotenv()
@@ -22,6 +28,7 @@ generation_config = {
 llm = genai.GenerativeModel(
     model_name="gemini-pro",
     generation_config=generation_config,
+    safety_settings=safety_settings,
     )
     
 def match_ingredients(user_ingredients, dietary_preferences=None):
