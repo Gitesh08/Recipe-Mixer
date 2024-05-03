@@ -3,6 +3,8 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 import vertexai
+import re
+from google.cloud import texttospeech
 
 PROJECT_ID = os.getenv("GCP_PROJECT")  # Your Google Cloud Project ID
 LOCATION = os.getenv("GCP_REGION")  # Your Google Cloud Project Region
@@ -27,6 +29,15 @@ llm = genai.GenerativeModel(
     model_name="gemini-pro",
     generation_config=generation_config,
 )
+
+# Text-to-Speech configuration
+client = texttospeech.TextToSpeechClient.from_service_account_json("path/recipe-mixer.json")
+voice = texttospeech.VoiceSelectionParams(
+    language_code="en-US", name="en-US-Standard-C", ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
+)
+audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
+
+st.set_page_config(page_title="Recipe Mixer", page_icon=":cooking:", layout="wide")
 
 def match_ingredients(user_ingredients, dietary_preferences=None):
     """
@@ -55,9 +66,15 @@ def match_ingredients(user_ingredients, dietary_preferences=None):
   # ... (code to parse response and extract recipe information)
     return recipe
 
-
-
-st.set_page_config(page_title="Recipe Mixer", page_icon=":cooking:", layout="wide")
+def synthesize_text(recipe):
+    
+    """Synthesizes speech from the recipe text and returns the audio content."""
+    cleaned_recipe = re.sub(r'[,:]|\\n|\u002a', '', recipe)
+    input_text = texttospeech.SynthesisInput(text=cleaned_recipe)
+    response = client.synthesize_speech(
+      request={"input": input_text, "voice": voice, "audio_config": audio_config}
+    )
+    return response.audio_content
 
 # Add a logo and name at the top left
 logo_and_name = """
@@ -111,6 +128,14 @@ if submit_button:
         if recipe:
             complete_recipe = f"\n{recipe}\n"
             st.write(complete_recipe.replace('\\n', '\n'))
+            
+            audio_content = synthesize_text(recipe)
+
+            if audio_content:
+                with open("output.mp3", "wb") as out:
+                    out.write(audio_content)
+
+                st.audio(audio_content, format="audio/mpeg")
         else:
             st.write("No Recipe Found 😔")
 
